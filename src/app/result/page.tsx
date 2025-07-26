@@ -1,7 +1,8 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 interface PersonalityType {
   type: string;
@@ -139,7 +140,8 @@ const personalityTypes: { [key: string]: PersonalityType } = {
   }
 };
 
-export default function ResultPage() {
+// 기존의 ResultPage 코드를 ResultPageContent로 옮깁니다.
+function ResultPageContent() {
   const searchParams = useSearchParams();
   const type = searchParams.get('type') || 'S';
   const personality = personalityTypes[type];
@@ -256,5 +258,14 @@ export default function ResultPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Suspense로 감싸서 export
+export default function ResultPage() {
+  return (
+    <Suspense fallback={<div>로딩 중...</div>}>
+      <ResultPageContent />
+    </Suspense>
   );
 } 
